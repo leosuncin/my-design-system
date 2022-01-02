@@ -4,4 +4,4 @@
 PATH=$(npm bin):$PATH
 
 tsc --noEmit --noErrorTruncation --pretty false --incremental false
-eslint
+dts lint

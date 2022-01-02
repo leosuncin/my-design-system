@@ -7,24 +7,33 @@
     "type": "git",
     "url": "git+https://github.com/leosuncin/my-design-system.git"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/my-design-system.esm.js",
+      "require": "./dist/index.js"
+    }
+  },
   "author": "Jaime Leonardo Suncin Cruz <leosuncin@gmail.com>",
   "homepage": "https://github.com/leosuncin/my-design-system#readme",
   "bugs": {
     "url": "https://github.com/leosuncin/my-design-system/issues"
   },
-  "main": "dist/my-design-system.cjs.js",
+  "main": "dist/index.js",
   "module": "dist/my-design-system.esm.js",
   "scripts": {
-    "build": "rollpkg build",
-    "lint": "eslint .",
-    "prepare": "husky install",
-    "prepublishOnly": "npm run build",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watchAll",
-    "watch": "rollpkg watch"
+    "analyze": "size-limit --why",
+    "build": "dts build",
+    "build-storybook": "build-storybook",
+    "lint": "dts lint",
+    "prepare": "husky install; dts build",
+    "size": "size-limit",
+    "start": "dts watch",
+    "storybook": "start-storybook -p 6006",
+    "test": "dts test --passWithNoTests"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "keywords": [
     "React",
@@ -34,42 +43,68 @@
     "react": ">=16.8"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.7",
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
+    "@size-limit/preset-small-lib": "^7.0.5",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-info": "^5.3.21",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/addons": "^6.4.9",
+    "@storybook/react": "^6.4.9",
+    "@tsconfig/create-react-app": "^1.0.2",
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "babel-loader": "^8.2.3",
+    "dts-cli": "^1.1.4",
     "husky": "^7.0.2",
     "lint-staged": "^11.1.2",
     "prettier-plugin-package": "^1.3.0",
     "prettier-plugin-sorted": "^2.0.0",
-    "rollpkg": "^0.5.7",
-    "typescript": "^4.4.3"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-is": "^17.0.2",
+    "size-limit": "^7.0.5",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.4"
   },
-  "types": "dist/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
     ]
   },
-  "eslintConfig": {
-    "extends": [
-      "./node_modules/rollpkg/configs/eslint"
-    ]
-  },
   "jest": {
-    "preset": "rollpkg"
+    "testEnvironment": "jsdom"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "prettier --write",
-      "eslint --fix"
+      "dts lint"
     ],
     "*.{json,md,css}": [
       "prettier --write"
     ]
   },
-  "prettier": "rollpkg/configs/prettier.json",
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
   "sideEffects": false,
-  "volta": {
-    "node": "14.16.1",
-    "npm": "6.14.12"
+  "size-limit": [
+    {
+      "path": "dist/my-design-system.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/my-design-system.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "engines": {
+    "node": ">=12"
   }
 }
